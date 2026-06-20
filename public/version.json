@@ -1,7 +1,7 @@
 {
-  "version": "1.0.7",
-  "buildDate": "2026-06-04",
-  "repoUrl": "https://github.com/xxg-yyds/xxgkami-pro",
+  "version": "1.0.7(1)",
+  "buildDate": "2026-06-20",
+  "repoUrl": "https://github.com/1216Z/xxgkami-pro2",
   "releaseDownloads": {
     "gitee": {
       "distZip": "https://gitee.com/xiaoxiaoguai-yyds/xxgkami-pro/releases/download/{version}/dist.zip",
@@ -13,6 +13,7 @@
     }
   },
   "changelog": [
+    "1.0.7(1)：【二改版】新增公益卡密功能，核销时跳过机器码绑定，不限制设备",
     "1. 新增在线更新：系统信息页可一键更新；自动探测后端 JAR 与前端 dist 路径，支持手动修改确认后下载 Release 制品并替换，完成后自动重启后端",
     "2. version.json 新增 releaseDownloads（Gitee/GitHub 各含 dist.zip 与 backend JAR 下载地址，支持 {version} 占位符）",
     "3. 检查更新优化：并行 ping gitee.com 与 github.com，优先使用先连通的通道拉取 version.json，并提示所用通道",

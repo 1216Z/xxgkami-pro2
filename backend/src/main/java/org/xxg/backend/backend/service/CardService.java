@@ -111,6 +111,8 @@ public class CardService {
      * 核销普通/简单卡密（不含高级 $ 格式）
      */
     private Card redeemCard(Card card, String deviceId, String ipAddress, Long apiKeyId, String machineCode) {
+        boolean isPublicCard = Boolean.TRUE.equals(card.getPublicCard());
+
         // Verify API Key binding
         if (card.getApiKeyId() != null) {
             if (apiKeyId == null || !card.getApiKeyId().equals(apiKeyId)) {
@@ -119,7 +121,9 @@ public class CardService {
         }
 
         ApiKey apiKeyEntity = loadApiKeyOrNull(apiKeyId);
-        enforceRequireMachineCode(apiKeyEntity, machineCode);
+        if (!isPublicCard) {
+            enforceRequireMachineCode(apiKeyEntity, machineCode);
+        }
 
         if (card.getStatus() != null && card.getStatus() == 2) {
             boolean wasActivated = card.getUseTime() != null;
@@ -130,10 +134,12 @@ public class CardService {
             throw new RuntimeException("该卡密已用于续期合并，无法再次使用");
         }
 
-        boolean needsMachinePersist = reconcileUsedCardMissingMachine(card, machineCode);
-        verifyMachineCode(card, machineCode);
-
-        assertMachineSpecAllowsRedemption(apiKeyEntity, machineCode, card);
+        boolean needsMachinePersist = false;
+        if (!isPublicCard) {
+            needsMachinePersist = reconcileUsedCardMissingMachine(card, machineCode);
+            verifyMachineCode(card, machineCode);
+            assertMachineSpecAllowsRedemption(apiKeyEntity, machineCode, card);
+        }
 
         LocalDateTime now = LocalDateTime.now();
         boolean isUpdated = false;
@@ -173,7 +179,7 @@ public class CardService {
                 card.setStatus(1);
                 card.setDeviceId(deviceId);
                 card.setIpAddress(ipAddress);
-                if (machineCode != null && !machineCode.isEmpty()) {
+                if (!isPublicCard && machineCode != null && !machineCode.isEmpty()) {
                     card.setMachineCode(machineCode);
                 }
                 isUpdated = true;
@@ -192,7 +198,7 @@ public class CardService {
             card.setUseTime(now);
             card.setDeviceId(deviceId);
             card.setIpAddress(ipAddress);
-            if (card.getMachineCode() == null && machineCode != null && !machineCode.isEmpty()) {
+            if (!isPublicCard && card.getMachineCode() == null && machineCode != null && !machineCode.isEmpty()) {
                 card.setMachineCode(machineCode);
             }
 
@@ -505,7 +511,7 @@ public class CardService {
                                  String verifyMethod, String encryptionType, int allowReverify,
                                  String creatorType, Long creatorId, String creatorName, Long apiKeyId) {
         return createCards(count, cardType, duration, totalCount, verifyMethod, encryptionType,
-                allowReverify, creatorType, creatorId, creatorName, apiKeyId, false, false);
+                allowReverify, creatorType, creatorId, creatorName, apiKeyId, false, false, false);
     }
 
     public List<Card> createCards(int count, String cardType, int duration, int totalCount,
@@ -513,16 +519,24 @@ public class CardService {
                                  String creatorType, Long creatorId, String creatorName, Long apiKeyId,
                                  boolean stackTimeIfSameMachine) {
         return createCards(count, cardType, duration, totalCount, verifyMethod, encryptionType,
-                allowReverify, creatorType, creatorId, creatorName, apiKeyId, stackTimeIfSameMachine, false);
+                allowReverify, creatorType, creatorId, creatorName, apiKeyId, stackTimeIfSameMachine, false, false);
     }
 
     public List<Card> createCards(int count, String cardType, int duration, int totalCount,
                                  String verifyMethod, String encryptionType, int allowReverify,
                                  String creatorType, Long creatorId, String creatorName, Long apiKeyId,
                                  boolean stackTimeIfSameMachine, boolean allowSelfUnbind) {
+        return createCards(count, cardType, duration, totalCount, verifyMethod, encryptionType,
+                allowReverify, creatorType, creatorId, creatorName, apiKeyId, stackTimeIfSameMachine, allowSelfUnbind, false);
+    }
+
+    public List<Card> createCards(int count, String cardType, int duration, int totalCount,
+                                 String verifyMethod, String encryptionType, int allowReverify,
+                                 String creatorType, Long creatorId, String creatorName, Long apiKeyId,
+                                 boolean stackTimeIfSameMachine, boolean allowSelfUnbind, boolean publicCard) {
 
         if ("advanced".equalsIgnoreCase(encryptionType)) {
-            return createAdvancedCards(count, totalCount, duration, allowReverify, creatorId, creatorType, creatorName, apiKeyId, stackTimeIfSameMachine, allowSelfUnbind);
+            return createAdvancedCards(count, totalCount, duration, allowReverify, creatorId, creatorType, creatorName, apiKeyId, stackTimeIfSameMachine, allowSelfUnbind, publicCard);
         }
                                      
         List<Card> cards = new ArrayList<>();
@@ -561,6 +575,7 @@ public class CardService {
             card.setApiKeyId(apiKeyId);
             card.setStackTimeIfSameMachine(stackTimeIfSameMachine && "time".equals(cardType));
             card.setAllowSelfUnbind(allowSelfUnbind);
+            card.setPublicCard(publicCard);
 
             cards.add(card);
         }
@@ -743,7 +758,7 @@ public class CardService {
                                        String verifyMethod, int allowReverify,
                                        String creatorType, Long creatorId, String creatorName,
                                        Long apiKeyId, boolean stackTimeIfSameMachine, boolean allowSelfUnbind,
-                                       int keyLength, List<String> manualKeys) {
+                                       int keyLength, List<String> manualKeys, boolean publicCard) {
         if (keyLength < 4 || keyLength > 128) {
             throw new RuntimeException("卡密长度须在 4～128 之间");
         }
@@ -790,6 +805,7 @@ public class CardService {
             card.setApiKeyId(apiKeyId);
             card.setStackTimeIfSameMachine(stackTimeIfSameMachine && "time".equals(cardType));
             card.setAllowSelfUnbind(allowSelfUnbind);
+            card.setPublicCard(publicCard);
             cards.add(card);
         }
         simpleCardMapper.batchInsert(cards);
@@ -951,7 +967,7 @@ public class CardService {
         throw new RuntimeException("不支持的状态操作");
     }
 
-    private List<Card> createAdvancedCards(int count, int totalCount, int duration, int allowReverify, Long creatorId, String creatorType, String creatorName, Long apiKeyId, boolean stackTimeIfSameMachine, boolean allowSelfUnbind) {
+    private List<Card> createAdvancedCards(int count, int totalCount, int duration, int allowReverify, Long creatorId, String creatorType, String creatorName, Long apiKeyId, boolean stackTimeIfSameMachine, boolean allowSelfUnbind, boolean publicCard) {
         List<Card> result = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
         
@@ -1022,6 +1038,7 @@ public class CardService {
                 card.setApiKeyId(apiKeyId);
                 card.setStackTimeIfSameMachine(stackTimeIfSameMachine && card.getCardType() != null && "time".equals(card.getCardType()));
                 card.setAllowSelfUnbind(allowSelfUnbind);
+                card.setPublicCard(publicCard);
                 
                 result.add(card);
             }
@@ -1066,8 +1083,11 @@ public class CardService {
             // Hash Check
             String cardHash = advancedCryptoUtil.hashArgon2id(payload.cardId, keyManagerService.getPepper());
             ApiKey apiKeyEntity = loadApiKeyOrNull(apiKeyId);
+            boolean isAdvancedPublicCard = cardMetadata != null && Boolean.TRUE.equals(cardMetadata.getPublicCard());
 
-            enforceRequireMachineCode(apiKeyEntity, machineCode);
+            if (!isAdvancedPublicCard) {
+                enforceRequireMachineCode(apiKeyEntity, machineCode);
+            }
 
             // Verify API Key binding for Advanced Card
             Card cardMetadata = cardMapper.findByCardKey(fullKey);
@@ -1082,13 +1102,15 @@ public class CardService {
             }
 
             if (cardMetadata != null) {
-                boolean persistMc = reconcileUsedCardMissingMachine(cardMetadata, machineCode);
-                verifyMachineCode(cardMetadata, machineCode);
-                assertMachineSpecAllowsRedemption(apiKeyEntity, machineCode, cardMetadata);
-                if (persistMc) {
-                    try {
-                        cardMapper.update(cardMetadata);
-                    } catch (Exception ignored) {
+                if (!isAdvancedPublicCard) {
+                    boolean persistMc = reconcileUsedCardMissingMachine(cardMetadata, machineCode);
+                    verifyMachineCode(cardMetadata, machineCode);
+                    assertMachineSpecAllowsRedemption(apiKeyEntity, machineCode, cardMetadata);
+                    if (persistMc) {
+                        try {
+                            cardMapper.update(cardMetadata);
+                        } catch (Exception ignored) {
+                        }
                     }
                 }
             }
@@ -1177,7 +1199,9 @@ public class CardService {
                 }
 
                 if (cardMetadata != null) {
-                    assertMachineSpecAllowsRedemption(apiKeyEntity, machineCode, cardMetadata);
+                    if (!isAdvancedPublicCard) {
+                        assertMachineSpecAllowsRedemption(apiKeyEntity, machineCode, cardMetadata);
+                    }
                 }
 
                 int newCount = statusRecord.getRemainCount();
@@ -1201,7 +1225,9 @@ public class CardService {
                         extendAnchorSubscription(anchor, cardMetadata.getDuration());
                         cardMapper.markCardMergedInto(cardMetadata.getId(), anchor.getId(), nowInner, machineCode,
                                 deviceId, ipAddress);
-                        recordMachineSpecRedemptionIfNeeded(apiKeyEntity, machineCode, cardMetadata);
+                        if (!isAdvancedPublicCard) {
+                            recordMachineSpecRedemptionIfNeeded(apiKeyEntity, machineCode, cardMetadata);
+                        }
 
                         Card anchorRow = cardMapper.findById(anchor.getId());
                         enrichAdvancedTimeCardExpireFromStatus(Collections.singletonList(anchorRow));
@@ -1232,18 +1258,22 @@ public class CardService {
                             && (statusRecord.getTotalCount() == null || statusRecord.getTotalCount() <= 0)) {
                         cardStatusMapper.updateQuota(cardHash, newCount, quotaTotal);
                     }
-                    recordMachineSpecRedemptionIfNeeded(apiKeyEntity, machineCode, cardMetadata);
+                    if (!isAdvancedPublicCard) {
+                        recordMachineSpecRedemptionIfNeeded(apiKeyEntity, machineCode, cardMetadata);
+                    }
                 } else {
                     if (activatedExpire == null && cardMetadata != null && cardMetadata.getDuration() != null && cardMetadata.getDuration() > 0) {
                         activatedExpire = nowInner.plusDays(cardMetadata.getDuration());
                         cardStatusMapper.activateExpireTime(cardHash, activatedExpire);
                     }
                     cardStatusMapper.updateUsage(cardHash, newCount, nowInner);
-                    recordMachineSpecRedemptionIfNeeded(apiKeyEntity, machineCode, cardMetadata);
+                    if (!isAdvancedPublicCard) {
+                        recordMachineSpecRedemptionIfNeeded(apiKeyEntity, machineCode, cardMetadata);
+                    }
                 }
 
                 String boundMachineCode = (cardMetadata != null) ? cardMetadata.getMachineCode() : null;
-                if (boundMachineCode == null && machineCode != null && !machineCode.isEmpty()) {
+                if (!isAdvancedPublicCard && boundMachineCode == null && machineCode != null && !machineCode.isEmpty()) {
                     boundMachineCode = machineCode;
                 }
 

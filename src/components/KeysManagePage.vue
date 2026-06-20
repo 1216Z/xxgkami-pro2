@@ -592,6 +592,24 @@
                   </label>
                 </div>
               </div>
+
+              <div class="form-group stack-time-stack-group stack-time-stack-group--compact">
+                <div
+                  class="stack-option-card stack-option-card--compact public-card-card"
+                  :class="{ 'stack-option-card--active': newKey.public_card }"
+                >
+                  <label class="stack-toggle-row">
+                    <span class="stack-switch stack-switch--sm">
+                      <input type="checkbox" v-model="newKey.public_card" class="stack-switch-input" />
+                      <span class="stack-switch-track"><span class="stack-switch-thumb"></span></span>
+                    </span>
+                    <span class="stack-toggle-copy">
+                      <span class="stack-toggle-title" style="color: #e74c3c;">❤️ 公益卡密</span>
+                      <span class="stack-toggle-desc">不绑定设备码，任意设备均可使用。</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -896,7 +914,8 @@ const newKey = reactive({
   manual_keys_text: '',
   allow_reverify: 1,
   stack_time_if_same_machine: false,
-  allow_self_unbind: false
+  allow_self_unbind: false,
+  public_card: false
 })
 
 const editingKey = reactive({
@@ -1182,6 +1201,7 @@ const createKeys = () => {
   newKey.allow_reverify = 1
   newKey.stack_time_if_same_machine = false
   newKey.allow_self_unbind = false
+  newKey.public_card = false
 }
 
 const editKey = (key) => {

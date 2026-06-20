@@ -53,6 +53,7 @@ public class SimpleCardMapper {
                             "stack_time_if_same_machine TINYINT(1) NOT NULL DEFAULT 0," +
                             "allow_self_unbind TINYINT(1) NOT NULL DEFAULT 0," +
                             "merged_into_card_id BIGINT NULL," +
+                            "public_card TINYINT(1) NOT NULL DEFAULT 0 COMMENT '公益卡密：跳过机器码绑定'," +
                             "PRIMARY KEY (id)," +
                             "UNIQUE KEY uk_simple_card_key (card_key)," +
                             "INDEX idx_simple_machine_code (machine_code)" +
@@ -114,7 +115,7 @@ public class SimpleCardMapper {
     public void batchInsert(List<Card> cards) {
         String sql = "INSERT INTO simple_cards (card_key, card_type, duration, total_count, remaining_count, status, " +
                 "verify_method, allow_reverify, create_time, creator_type, creator_id, creator_name, api_key_id, " +
-                "stack_time_if_same_machine, allow_self_unbind) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "stack_time_if_same_machine, allow_self_unbind, public_card) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
@@ -139,6 +140,7 @@ public class SimpleCardMapper {
                 }
                 ps.setInt(14, Boolean.TRUE.equals(card.getStackTimeIfSameMachine()) ? 1 : 0);
                 ps.setInt(15, Boolean.TRUE.equals(card.getAllowSelfUnbind()) ? 1 : 0);
+                ps.setInt(16, Boolean.TRUE.equals(card.getPublicCard()) ? 1 : 0);
             }
 
             @Override
@@ -249,6 +251,7 @@ public class SimpleCardMapper {
             if (!rs.wasNull()) {
                 card.setMergedIntoCardId(merged);
             }
+            card.setPublicCard(rs.getInt("public_card") == 1);
             return card;
         }
     }

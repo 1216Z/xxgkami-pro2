@@ -72,7 +72,8 @@ public class CardController {
                         Boolean.TRUE.equals(request.getStackTimeIfSameMachine()),
                         Boolean.TRUE.equals(request.getAllowSelfUnbind()),
                         request.getKeyLength() != null ? request.getKeyLength() : 16,
-                        request.getManualCardKeys()
+                        request.getManualCardKeys(),
+                        Boolean.TRUE.equals(request.getPublicCard())
                 );
             } else {
                 String encType = request.getEncryptionType();
@@ -92,7 +93,8 @@ public class CardController {
                         adminName,
                         request.getApiKeyId(),
                         Boolean.TRUE.equals(request.getStackTimeIfSameMachine()),
-                        Boolean.TRUE.equals(request.getAllowSelfUnbind())
+                        Boolean.TRUE.equals(request.getAllowSelfUnbind()),
+                        Boolean.TRUE.equals(request.getPublicCard())
                 );
             }
             return ResponseEntity.ok(Map.of("success", true, "data", cards));
@@ -354,6 +356,9 @@ public class CardController {
         @JsonProperty("manual_card_keys")
         private List<String> manualCardKeys;
 
+        @JsonProperty("public_card")
+        private Boolean publicCard;
+
         // Getters and Setters
         public int getCount() { return count; }
         public void setCount(int count) { this.count = count; }
@@ -393,5 +398,8 @@ public class CardController {
 
         public List<String> getManualCardKeys() { return manualCardKeys; }
         public void setManualCardKeys(List<String> manualCardKeys) { this.manualCardKeys = manualCardKeys; }
+
+        public Boolean getPublicCard() { return publicCard; }
+        public void setPublicCard(Boolean publicCard) { this.publicCard = publicCard; }
     }
 }

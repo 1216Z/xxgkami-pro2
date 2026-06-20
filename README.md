@@ -1,3 +1,16 @@
+> ⚠️ **二改声明**：本项目基于 [xxg-yyds/xxgkami-pro](https://github.com/xxg-yyds/xxgkami-pro)（原作者：小小怪）进行二次开发，感谢原作者的辛勤付出！
+> 
+> | 类型 | 仓库地址 |
+> |------|----------|
+> | **原版仓库** | [https://github.com/xxg-yyds/xxgkami-pro](https://github.com/xxg-yyds/xxgkami-pro) |
+> | **二改仓库** | [https://github.com/1216Z/xxgkami-pro2](https://github.com/1216Z/xxgkami-pro2) |
+> | **原版更新** | [Releases](https://github.com/xxg-yyds/xxgkami-pro/releases) |
+> | **二改更新** | [Releases](https://github.com/1216Z/xxgkami-pro2/releases) |
+>
+> **二改新增功能**：公益卡密（不绑定设备码，任意设备均可使用）
+
+---
+
 <div align="center">
 
 <img src="src/assets/icon.gif" alt="icon" width="120" />

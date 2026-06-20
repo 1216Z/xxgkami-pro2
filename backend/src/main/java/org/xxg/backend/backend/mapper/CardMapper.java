@@ -70,6 +70,11 @@ public class CardMapper {
         } catch (Exception e) {
             // exists
         }
+        try {
+            jdbcTemplate.execute("ALTER TABLE cards ADD COLUMN public_card TINYINT(1) NOT NULL DEFAULT 0 COMMENT '公益卡密：跳过机器码绑定'");
+        } catch (Exception e) {
+            // exists
+        }
         System.out.println("Successfully updated cards table columns.");
     }
 
@@ -244,8 +249,8 @@ public class CardMapper {
      * 批量插入卡密
      */
     public void batchInsert(List<Card> cards) {
-        String sql = "INSERT INTO cards (card_key, encrypted_key, card_type, duration, total_count, remaining_count, status, verify_method, encryption_type, allow_reverify, create_time, creator_type, creator_id, creator_name, api_key_id, stack_time_if_same_machine, allow_self_unbind, merged_into_card_id) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO cards (card_key, encrypted_key, card_type, duration, total_count, remaining_count, status, verify_method, encryption_type, allow_reverify, create_time, creator_type, creator_id, creator_name, api_key_id, stack_time_if_same_machine, allow_self_unbind, merged_into_card_id, public_card) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
@@ -277,6 +282,7 @@ public class CardMapper {
                 } else {
                     ps.setNull(18, java.sql.Types.BIGINT);
                 }
+                ps.setInt(19, Boolean.TRUE.equals(card.getPublicCard()) ? 1 : 0);
             }
 
             @Override
@@ -414,6 +420,10 @@ public class CardMapper {
                 if (!rs.wasNull()) {
                     card.setMergedIntoCardId(merged);
                 }
+            } catch (SQLException ignored) {
+            }
+            try {
+                card.setPublicCard(rs.getInt("public_card") == 1);
             } catch (SQLException ignored) {
             }
             card.setStorageType("encrypted");

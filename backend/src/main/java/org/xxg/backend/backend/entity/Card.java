@@ -83,6 +83,10 @@ public class Card {
     @JsonProperty("storage_type")
     private String storageType;
 
+    /** 公益卡密：true 时核销跳过机器码绑定，不限制设备 */
+    @JsonProperty("public_card")
+    private Boolean publicCard;
+
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -158,4 +162,7 @@ public class Card {
 
     public String getStorageType() { return storageType; }
     public void setStorageType(String storageType) { this.storageType = storageType; }
+
+    public Boolean getPublicCard() { return publicCard; }
+    public void setPublicCard(Boolean publicCard) { this.publicCard = publicCard; }
 }
