@@ -26,14 +26,14 @@
 
 **🔥 采用最新技术栈重构，性能提升300%，用户体验全面升级！**
 
-🏠 [官方网站](https://www.xxgkami.com/) · 📖 [官网文档](https://doc.xxgkami.com/) · 🌟 [官方体验](https://demo.xxgkami.com/)
+🏠 [二改部署](https://ht.botmx.dpdns.org/) · 📖 [原版官网](https://www.xxgkami.com/) · 📖 [原版文档](https://doc.xxgkami.com/)
 
-[🌟 立即体验](https://demo.xxgkami.com/) · [📖 部署指南](#-快速部署指南) · [🐛 反馈问题](https://github.com/xxg-yyds/xxgkami-pro/issues) · [💬 加入讨论](https://github.com/xxg-yyds/xxgkami-pro/discussions)
+[🌟 二改体验](https://ht.botmx.dpdns.org/) · [📖 部署指南](#-快速部署指南) · [🐛 反馈问题](https://github.com/1216Z/xxgkami-pro2/issues) · [💬 加入讨论](https://github.com/1216Z/xxgkami-pro2/discussions)
 
 </div>
 
-> ⚠️ **仓库迁移说明**：旧版 GitHub 发布地址 [xiaoxiaoguai-yyds/xxgkami-pro](https://github.com/xiaoxiaoguai-yyds/xxgkami-pro) **已失效**，请勿再从此仓库拉取安装脚本或 Releases。  
-> 当前**新版本**仓库与发布地址：[**xxg-yyds/xxgkami-pro**](https://github.com/xxg-yyds/xxgkami-pro) · [Releases 下载页](https://github.com/xxg-yyds/xxgkami-pro/releases)
+> ⚠️ **仓库迁移说明**：本项目基于 [xxg-yyds/xxgkami-pro](https://github.com/xxg-yyds/xxgkami-pro) 二次开发，请前往原版仓库获取安装脚本。  
+> 当前**二改版**仓库：[**1216Z/xxgkami-pro2**](https://github.com/1216Z/xxgkami-pro2) · [Releases 下载页](https://github.com/1216Z/xxgkami-pro2/releases)
 
 ---
 
@@ -52,7 +52,7 @@ curl -O https://gitee.com/xiaoxiaoguai-yyds/xxgkami-pro/raw/master/install.sh &&
 
 **海外服务器（GitHub 源）：**
 ```bash
-curl -O https://raw.githubusercontent.com/xxg-yyds/xxgkami-pro/refs/heads/master/install.sh && chmod +x install.sh && sudo ./install.sh
+curl -O https://raw.githubusercontent.com/1216Z/xxgkami-pro2/refs/heads/master/install.sh && chmod +x install.sh && sudo ./install.sh
 ```
 
 **脚本功能：**
@@ -73,8 +73,8 @@ curl -O https://raw.githubusercontent.com/xxg-yyds/xxgkami-pro/refs/heads/master
 
 | 渠道 | 说明 |
 |------|------|
-| **GitHub Releases** | [https://github.com/xxg-yyds/xxgkami-pro/releases](https://github.com/xxg-yyds/xxgkami-pro/releases) 下载最新发布包 |
-| **GitHub 仓库** | [https://github.com/xxg-yyds/xxgkami-pro](https://github.com/xxg-yyds/xxgkami-pro) 查看源码与仓库内附带文件 |
+| **GitHub Releases** | [https://github.com/1216Z/xxgkami-pro2/releases](https://github.com/1216Z/xxgkami-pro2/releases) 下载最新发布包 |
+| **GitHub 仓库** | [https://github.com/1216Z/xxgkami-pro2](https://github.com/1216Z/xxgkami-pro2) 查看源码与仓库内附带文件 |
 | **官方 QQ 群** | 群号 `1050160397`，群内可获取最新编译包与部署答疑 |
 
 <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=CuHJ-5Rf6uW94FT7ogPCodTjAghwBl0C&jump_from=webapi&authKey=GkL+FpvNF54Wko1C+gVqqiONrrYnpTCka5uKQyFHboOc9hZUVa9eeCMWqyFUyIob"><img border="0" src="https://pub.idqqimg.com/wpa/images/group.png" alt="小小怪卡密" title="小小怪卡密"></a>
@@ -108,7 +108,7 @@ curl -O https://raw.githubusercontent.com/xxg-yyds/xxgkami-pro/refs/heads/master
 
 适用于已有宝塔面板的服务器，使用编译好的制品快速部署。
 
-1. **下载编译制品**：从 [Releases](https://github.com/xxg-yyds/xxgkami-pro/releases) 下载最新的 `backend.jar` 和 `dist.zip`。
+1. **下载编译制品**：从 [Releases](https://github.com/1216Z/xxgkami-pro2/releases) 下载最新的 `backend.jar` 和 `dist.zip`。
 2. **后端部署**：
    - 在宝塔“Java项目”中添加项目。
    - 上传 `backend.jar`，选择 JDK 20。
@@ -133,7 +133,7 @@ curl -O https://raw.githubusercontent.com/xxg-yyds/xxgkami-pro/refs/heads/master
 
 1. **克隆代码**
    ```bash
-   git clone https://github.com/xxg-yyds/xxgkami-pro.git
+   git clone https://github.com/1216Z/xxgkami-pro2.git
    cd xxgkami-pro
    ```
 
@@ -268,8 +268,8 @@ curl -O https://raw.githubusercontent.com/xxg-yyds/xxgkami-pro/refs/heads/master
 ### 🏆 **贡献者排行榜**
 感谢所有为项目做出贡献的开发者！
 
-<a href="https://github.com/xxg-yyds/xxgkami-pro/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=xxg-yyds/xxgkami-pro" />
+<a href="https://github.com/1216Z/xxgkami-pro2/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=1216Z/xxgkami-pro2" />
 </a>
 
 ---
@@ -294,24 +294,22 @@ curl -O https://raw.githubusercontent.com/xxg-yyds/xxgkami-pro/refs/heads/master
 ## 📞 联系我们
 
 ### 💬 **社区交流**
-- 🐛 [问题反馈](https://github.com/xxg-yyds/xxgkami-pro/issues)
-- 💡 [功能建议](https://github.com/xxg-yyds/xxgkami-pro/discussions)
+- 🐛 [问题反馈](https://github.com/1216Z/xxgkami-pro2/issues)
+- 💡 [功能建议](https://github.com/1216Z/xxgkami-pro2/discussions)
 - 💬 **官方交流群**：`1050160397`（售后 / 技术支持）  
   <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=CuHJ-5Rf6uW94FT7ogPCodTjAghwBl0C&jump_from=webapi&authKey=GkL+FpvNF54Wko1C+gVqqiONrrYnpTCka5uKQyFHboOc9hZUVa9eeCMWqyFUyIob"><img border="0" src="https://pub.idqqimg.com/wpa/images/group.png" alt="小小怪卡密" title="小小怪卡密"></a>
 - 📧 **联系邮箱**：`xxgyyds@vip.qq.com`
 
 ### 🌐 **开源地址**
-- 🐙 **GitHub**: [https://github.com/xxg-yyds/xxgkami-pro](https://github.com/xxg-yyds/xxgkami-pro)
-- 🔴 **Gitee**: [https://gitee.com/xiaoxiaoguai-yyds/xxgkami-pro](https://gitee.com/xiaoxiaoguai-yyds/xxgkami-pro)
-- 🚀 **GitCode**: [https://atomgit.com/xxg-yyds/xxgkami-pro](https://atomgit.com/xxg-yyds/xxgkami-pro)
+- 🐙 **GitHub（二改）**: [https://github.com/1216Z/xxgkami-pro2](https://github.com/1216Z/xxgkami-pro2)
+- 🐙 **GitHub（原版）**: [https://github.com/xxg-yyds/xxgkami-pro](https://github.com/xxg-yyds/xxgkami-pro)
+- 🔴 **Gitee（原版）**: [https://gitee.com/xiaoxiaoguai-yyds/xxgkami-pro](https://gitee.com/xiaoxiaoguai-yyds/xxgkami-pro)
 
 ### 🌐 **官方链接**
-- 🏠 [官方网站](https://www.xxgkami.com/)
-- 📖 [官网文档](https://doc.xxgkami.com/)
-- 🌟 [官方体验](https://demo.xxgkami.com/)
-- 🐱 [GitHub 仓库](https://github.com/xxg-yyds/xxgkami-pro)
-- 🔴 [Gitee 仓库](https://gitee.com/xiaoxiaoguai-yyds/xxgkami-pro)
-- 🚀 [GitCode 仓库](https://atomgit.com/xxg-yyds/xxgkami-pro)
+- 🚀 [二改部署](https://ht.botmx.dpdns.org/)
+- 🏠 [原版官网](https://www.xxgkami.com/)
+- 📖 [原版文档](https://doc.xxgkami.com/)
+- 🐱 [GitHub 仓库](https://github.com/1216Z/xxgkami-pro2)
 
 ---
 
@@ -323,7 +321,7 @@ curl -O https://raw.githubusercontent.com/xxg-yyds/xxgkami-pro/refs/heads/master
 
 ## ⭐ Star 历史
 
-[![Star History Chart](https://api.star-history.com/svg?repos=xxg-yyds/xxgkami-pro&type=Date)](https://star-history.com/#xxg-yyds/xxgkami-pro&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=1216Z/xxgkami-pro2&type=Date)](https://star-history.com/#1216Z/xxgkami-pro2&Date)
 
 ---
 
